@@ -9,6 +9,7 @@ import CloudIcon from "@material-ui/icons/Cloud";
 import FolderIcon from "@material-ui/icons/Folder";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import ViewListIcon from "@material-ui/icons/ViewList";
+import ListIcon from "@material-ui/icons/List";
 
 export const nodeFolderListItems = (
   <div>
@@ -18,7 +19,7 @@ export const nodeFolderListItems = (
       </ListItemIcon>
       <ListItemText primary="Εταιρία" />
     </ListItem>
-    <ListItem button>
+    <ListItem button component={NavLink} to="/services">
       <ListItemIcon>
         <CloudIcon />
       </ListItemIcon>
@@ -52,6 +53,12 @@ export const menuFolderListItems = (
         <ViewListIcon />
       </ListItemIcon>
       <ListItemText primary="Menu" />
+    </ListItem>
+    <ListItem button>
+      <ListItemIcon>
+        <ListIcon />
+      </ListItemIcon>
+      <ListItemText primary="Υπό Menu" />
     </ListItem>
   </div>
 );

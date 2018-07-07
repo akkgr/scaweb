@@ -169,6 +169,7 @@ class App extends React.Component {
             <List>{nodeFolderListItems}</List>
             <Divider />
             <List>{menuFolderListItems}</List>
+            <Divider />
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />

@@ -10,19 +10,28 @@ import SearchIcon from "@material-ui/icons/Search";
 import Toolbar from "@material-ui/core/Toolbar";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import Typography from "@material-ui/core/Typography";
 
 const styles = theme => ({
   flex: {
+    flex: 1
+  },
+  menuTitle: {
+    marginLeft: 40,
+    marginRight: 20,
     flex: 1
   }
 });
 
 function ListToolBar(props) {
-  const { classes } = props;
+  const { classes, title } = props;
   return (
     <Toolbar>
+      <Typography variant="title" color="inherit">
+        {title}
+      </Typography>
       <TextField
-        className={classes.flex}
+        className={classes.menuTitle}
         label="Αναζήτηση"
         InputProps={{
           startAdornment: (

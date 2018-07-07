@@ -53,7 +53,7 @@ class Companies extends React.Component {
       <AppContext.Consumer>
         {context => (
           <Paper className={classes.root}>
-            <ListToolBar />
+            <ListToolBar title="Εταιρίες" />
             <Table className={classes.table}>
               <TableHead>
                 <TableRow>
