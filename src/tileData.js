@@ -25,19 +25,19 @@ export const nodeFolderListItems = (
       </ListItemIcon>
       <ListItemText primary="Υπηρεσία" />
     </ListItem>
-    <ListItem button>
+    <ListItem button component={NavLink} to="/programs">
       <ListItemIcon>
         <FolderIcon />
       </ListItemIcon>
       <ListItemText primary="Πρόγραμμα" />
     </ListItem>
-    <ListItem button>
+    <ListItem button component={NavLink} to="/areas">
       <ListItemIcon>
         <LocationOnIcon />
       </ListItemIcon>
       <ListItemText primary="Περιοχή" />
     </ListItem>
-    <ListItem button>
+    <ListItem button component={NavLink} to="/actions">
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
@@ -48,13 +48,13 @@ export const nodeFolderListItems = (
 
 export const menuFolderListItems = (
   <div>
-    <ListItem button>
+    <ListItem button component={NavLink} to="/menu">
       <ListItemIcon>
         <ViewListIcon />
       </ListItemIcon>
       <ListItemText primary="Menu" />
     </ListItem>
-    <ListItem button>
+    <ListItem button component={NavLink} to="/submenu">
       <ListItemIcon>
         <ListIcon />
       </ListItemIcon>
