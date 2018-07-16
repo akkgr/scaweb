@@ -25,9 +25,14 @@ const styles = theme => ({
 });
 
 function getSorting(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => (b[orderBy] < a[orderBy] ? -1 : 1)
-    : (a, b) => (a[orderBy] < b[orderBy] ? -1 : 1);
+  return (a, b) => {
+    if (a[orderBy] < b[orderBy]) return order === "desc" ? 1 : -1;
+    if (a[orderBy] > b[orderBy]) return order === "desc" ? -1 : 1;
+    else {
+      if (a["id"] < b["id"]) return order === "desc" ? 1 : -1;
+      if (a["id"] > b["id"]) return order === "desc" ? -1 : 1;
+    }
+  };
 }
 
 class OrgNode extends React.Component {
