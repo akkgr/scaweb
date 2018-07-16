@@ -33,7 +33,7 @@ function getSorting(order, orderBy) {
 class OrgNode extends React.Component {
   constructor(props) {
     super(props);
-    this.getStations = this.getData.bind(this);
+    this.getData = this.getData.bind(this);
     this.state = {
       order: "asc",
       orderBy: "viewOrder",
@@ -98,9 +98,19 @@ class OrgNode extends React.Component {
     fetch("http://localhost:16726/api/orgnodes/type/" + typeId, {
       method: "GET"
     })
-      .then(res => res.json())
-      .then(res => this.setState({ data: res }))
-      .catch(e => {});
+      .then(res => {
+        if (!res.ok) {
+          throw Error(res.statusText);
+        } else {
+          return res.json();
+        }
+      })
+      .then(res => {
+        this.setState({ data: res });
+      })
+      .catch(e => {
+        this.props.context.showMessage("error", e.toString());
+      });
   }
 
   handleRequestSort = (event, property) => {
@@ -115,7 +125,7 @@ class OrgNode extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, context } = this.props;
     const { path, data, order, orderBy, rowsPerPage, page } = this.state;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
@@ -154,19 +164,17 @@ class OrgNode extends React.Component {
     ];
 
     return (
-      <AppContext.Consumer>
-        {context => (
-          <Paper className={classes.root}>
-            <ListToolBar title={path} />
-            <Table className={classes.table}>
-              <EnhancedTableHead
-                columnData={columnData}
-                order={order}
-                orderBy={orderBy}
-                onRequestSort={this.handleRequestSort}
-                rowCount={data.length}
-              />
-              {/* <TableHead>
+      <Paper className={classes.root}>
+        <ListToolBar title={path} />
+        <Table className={classes.table}>
+          <EnhancedTableHead
+            columnData={columnData}
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={this.handleRequestSort}
+            rowCount={data.length}
+          />
+          {/* <TableHead>
                 <TableRow>
                   <TableCell>Όνομα</TableCell>
                   <TableCell>Κωδικός</TableCell>
@@ -175,31 +183,27 @@ class OrgNode extends React.Component {
                   <TableCell>Application Object</TableCell>
                 </TableRow>
               </TableHead> */}
-              <TableBody>
-                {data.sort(getSorting(order, orderBy)).map(n => {
-                  return (
-                    <TableRow
-                      selected={context.selectedNodes[0].id === n.id}
-                      key={n.id}
-                      onClick={e => context.selectNode(e, 0, n.id, n.title)}
-                    >
-                      <TableCell component="th" scope="row">
-                        {n.title}
-                      </TableCell>
-                      <TableCell>{n.code}</TableCell>
-                      <TableCell>
-                        {n.isActive === true ? "ΝΑΙ" : "ΟΧΙ"}
-                      </TableCell>
-                      <TableCell numeric>{n.viewOrder}</TableCell>
-                      <TableCell>{n.appObject}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </Paper>
-        )}
-      </AppContext.Consumer>
+          <TableBody>
+            {data.sort(getSorting(order, orderBy)).map(n => {
+              return (
+                <TableRow
+                  selected={context.selectedNodes[0].id === n.id}
+                  key={n.id}
+                  onClick={e => context.selectNode(e, 0, n.id, n.title)}
+                >
+                  <TableCell component="th" scope="row">
+                    {n.title}
+                  </TableCell>
+                  <TableCell>{n.code}</TableCell>
+                  <TableCell>{n.isActive === true ? "ΝΑΙ" : "ΟΧΙ"}</TableCell>
+                  <TableCell numeric>{n.viewOrder}</TableCell>
+                  <TableCell>{n.appObject}</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </Paper>
     );
   }
 }
@@ -208,4 +212,8 @@ OrgNode.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(OrgNode);
+export default withStyles(styles)(props => (
+  <AppContext.Consumer>
+    {context => <OrgNode {...props} context={context} />}
+  </AppContext.Consumer>
+));

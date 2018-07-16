@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
+import Snackbar from "@material-ui/core/Snackbar";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -16,6 +17,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { nodeFolderListItems, menuFolderListItems } from "./tileData";
 import indexRoutes from "./routes.js";
 import { AppContext, defaultNodes } from "./app-context";
+import MySnackbarContent from "./shared/CustomizedSnackbars";
 
 const drawerWidth = 240;
 
@@ -99,11 +101,27 @@ class App extends React.Component {
       });
     };
 
+    this.showMessage = (variant, body) => {
+      this.setState({
+        message: {
+          open: true,
+          variant: variant,
+          body: body
+        }
+      });
+    };
+
     this.state = {
       open: false,
+      message: {
+        open: false,
+        variant: "info",
+        body: ""
+      },
       context: {
         selectedNodes: defaultNodes,
-        selectNode: this.selectNode
+        selectNode: this.selectNode,
+        showMessage: this.showMessage
       }
     };
   }
@@ -114,6 +132,20 @@ class App extends React.Component {
 
   handleDrawerClose = () => {
     this.setState({ open: false });
+  };
+
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({
+      message: {
+        open: false,
+        variant: this.state.message.variant,
+        body: ""
+      }
+    });
   };
 
   render() {
@@ -184,6 +216,21 @@ class App extends React.Component {
                 );
               })}
             </Switch>
+            <Snackbar
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left"
+              }}
+              open={this.state.message.open}
+              autoHideDuration={6000}
+              onClose={this.handleClose}
+            >
+              <MySnackbarContent
+                onClose={this.handleClose}
+                variant={this.state.message.variant}
+                message={this.state.message.body}
+              />
+            </Snackbar>
           </main>
         </div>
       </AppContext.Provider>
