@@ -211,6 +211,11 @@ class OrgNode extends React.Component {
                   </TableRow>
                 );
               })}
+            {emptyRows > 0 && (
+              <TableRow style={{ height: 48 * emptyRows }}>
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
           </TableBody>
         </Table>
         <TablePagination

@@ -19,6 +19,7 @@ import indexRoutes from "./routes.js";
 import { AppContext, defaultNodes } from "./app-context";
 import MySnackbarContent from "./shared/CustomizedSnackbars";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import "./app.css";
 
 const drawerWidth = 240;
 
