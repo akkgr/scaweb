@@ -32,10 +32,9 @@ function ListToolBar(props) {
       </Typography>
       <TextField
         className={classes.menuTitle}
-        label="Αναζήτηση"
         InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
+          endAdornment: (
+            <InputAdornment position="end">
               <SearchIcon />
             </InputAdornment>
           )

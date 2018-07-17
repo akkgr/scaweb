@@ -6,6 +6,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import EnhancedTableHead from "../shared/EnhancedTableHead";
 import TableRow from "@material-ui/core/TableRow";
+import TablePagination from "@material-ui/core/TablePagination";
 import Paper from "@material-ui/core/Paper";
 import ListToolBar from "../shared/ListToolBar";
 import { AppContext } from "../app-context";
@@ -42,7 +43,9 @@ class OrgNode extends React.Component {
     this.state = {
       order: "asc",
       orderBy: "viewOrder",
-      data: []
+      data: [],
+      page: 0,
+      rowsPerPage: 10
     };
   }
 
@@ -129,6 +132,14 @@ class OrgNode extends React.Component {
     this.setState({ order, orderBy });
   };
 
+  handleChangePage = (event, page) => {
+    this.setState({ page });
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.setState({ rowsPerPage: event.target.value });
+  };
+
   render() {
     const { classes, context } = this.props;
     const { path, data, order, orderBy, rowsPerPage, page } = this.state;
@@ -179,35 +190,43 @@ class OrgNode extends React.Component {
             onRequestSort={this.handleRequestSort}
             rowCount={data.length}
           />
-          {/* <TableHead>
-                <TableRow>
-                  <TableCell>Όνομα</TableCell>
-                  <TableCell>Κωδικός</TableCell>
-                  <TableCell>Ενεργή</TableCell>
-                  <TableCell numeric>Σειρά Εμφάνισης</TableCell>
-                  <TableCell>Application Object</TableCell>
-                </TableRow>
-              </TableHead> */}
           <TableBody>
-            {data.sort(getSorting(order, orderBy)).map(n => {
-              return (
-                <TableRow
-                  selected={context.selectedNodes[0].id === n.id}
-                  key={n.id}
-                  onClick={e => context.selectNode(e, 0, n.id, n.title)}
-                >
-                  <TableCell component="th" scope="row">
-                    {n.title}
-                  </TableCell>
-                  <TableCell>{n.code}</TableCell>
-                  <TableCell>{n.isActive === true ? "ΝΑΙ" : "ΟΧΙ"}</TableCell>
-                  <TableCell numeric>{n.viewOrder}</TableCell>
-                  <TableCell>{n.appObject}</TableCell>
-                </TableRow>
-              );
-            })}
+            {data
+              .sort(getSorting(order, orderBy))
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map(n => {
+                return (
+                  <TableRow
+                    selected={context.selectedNodes[0].id === n.id}
+                    key={n.id}
+                    onClick={e => context.selectNode(e, 0, n.id, n.title)}
+                  >
+                    <TableCell component="th" scope="row">
+                      {n.title}
+                    </TableCell>
+                    <TableCell>{n.code}</TableCell>
+                    <TableCell>{n.isActive === true ? "ΝΑΙ" : "ΟΧΙ"}</TableCell>
+                    <TableCell numeric>{n.viewOrder}</TableCell>
+                    <TableCell>{n.appObject}</TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
+        <TablePagination
+          component="div"
+          count={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          backIconButtonProps={{
+            "aria-label": "Previous Page"
+          }}
+          nextIconButtonProps={{
+            "aria-label": "Next Page"
+          }}
+          onChangePage={this.handleChangePage}
+          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+        />
       </Paper>
     );
   }

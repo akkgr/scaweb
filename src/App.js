@@ -18,6 +18,7 @@ import { nodeFolderListItems, menuFolderListItems } from "./tileData";
 import indexRoutes from "./routes.js";
 import { AppContext, defaultNodes } from "./app-context";
 import MySnackbarContent from "./shared/CustomizedSnackbars";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 const drawerWidth = 240;
 
@@ -151,88 +152,124 @@ class App extends React.Component {
   render() {
     const { classes, theme } = this.props;
 
+    const colorTheme = createMuiTheme({
+      palette: {
+        primary: {
+          light: "#B2DFDB",
+          main: "#009688",
+          dark: "#004D40",
+          contrastText: "#fff"
+        },
+        secondary: {
+          light: "#FFE0B2",
+          main: "#FF9800",
+          dark: "#E65100",
+          contrastText: "#fff"
+        },
+        error: {
+          light: "#FFCDD2",
+          main: "#F44336",
+          dark: "#B71C1C",
+          contrastText: "#fff"
+        },
+        background: {
+          paper: "#EEEEEE",
+          default: "#E0E0E0"
+        },
+        // Used by `getContrastText()` to maximize the contrast between the background and
+        // the text.
+        contrastThreshold: 3,
+        // Used to shift a color's luminance by approximately
+        // two indexes within its tonal palette.
+        // E.g., shift from Red 500 to Red 300 or Red 700.
+        tonalOffset: 0.2
+      }
+    });
+
     return (
       <AppContext.Provider value={this.state.context}>
-        <div className={classes.root}>
-          <AppBar
-            position="absolute"
-            className={classNames(
-              classes.appBar,
-              this.state.open && classes.appBarShift
-            )}
-          >
-            <Toolbar disableGutters={!this.state.open}>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={this.handleDrawerOpen}
-                className={classNames(
-                  classes.menuButton,
-                  this.state.open && classes.hide
-                )}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Typography variant="title" color="inherit" noWrap>
-                SCA
-              </Typography>
-            </Toolbar>
-          </AppBar>
-          <Drawer
-            variant="permanent"
-            classes={{
-              paper: classNames(
-                classes.drawerPaper,
-                !this.state.open && classes.drawerPaperClose
-              )
-            }}
-            open={this.state.open}
-          >
-            <div className={classes.toolbar}>
-              <IconButton onClick={this.handleDrawerClose}>
-                {theme.direction === "rtl" ? (
-                  <ChevronRightIcon />
-                ) : (
-                  <ChevronLeftIcon />
-                )}
-              </IconButton>
-            </div>
-            <Divider />
-            <List>{nodeFolderListItems}</List>
-            <Divider />
-            <List>{menuFolderListItems}</List>
-            <Divider />
-          </Drawer>
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-            <Switch>
-              {indexRoutes.map((prop, key) => {
-                return (
-                  <Route
-                    path={prop.path}
-                    component={prop.component}
-                    key={key}
-                  />
-                );
-              })}
-            </Switch>
-            <Snackbar
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left"
-              }}
-              open={this.state.message.open}
-              autoHideDuration={6000}
-              onClose={this.handleClose}
+        <MuiThemeProvider theme={colorTheme}>
+          <div className={classes.root}>
+            <AppBar
+              position="absolute"
+              className={classNames(
+                classes.appBar,
+                this.state.open && classes.appBarShift
+              )}
             >
-              <MySnackbarContent
+              <Toolbar disableGutters={!this.state.open}>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={this.handleDrawerOpen}
+                  className={classNames(
+                    classes.menuButton,
+                    this.state.open && classes.hide
+                  )}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Typography variant="title" color="inherit" noWrap>
+                  SCA
+                </Typography>
+              </Toolbar>
+            </AppBar>
+            <Drawer
+              variant="permanent"
+              classes={{
+                paper: classNames(
+                  classes.drawerPaper,
+                  !this.state.open && classes.drawerPaperClose
+                )
+              }}
+              open={this.state.open}
+            >
+              <div className={classes.toolbar}>
+                <IconButton onClick={this.handleDrawerClose}>
+                  {theme.direction === "rtl" ? (
+                    <ChevronRightIcon />
+                  ) : (
+                    <ChevronLeftIcon />
+                  )}
+                </IconButton>
+              </div>
+              <Divider />
+              <List>{nodeFolderListItems}</List>
+              <Divider />
+              <List>{menuFolderListItems}</List>
+              <Divider />
+            </Drawer>
+            <main className={classes.content}>
+              <div className={classes.toolbar} />
+              <Switch>
+                {indexRoutes.map((prop, key) => {
+                  return (
+                    <Route
+                      path={prop.path}
+                      component={prop.component}
+                      key={key}
+                    />
+                  );
+                })}
+              </Switch>
+              <Snackbar
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left"
+                }}
+                open={this.state.message.open}
+                autoHideDuration={6000}
                 onClose={this.handleClose}
-                variant={this.state.message.variant}
-                message={this.state.message.body}
-              />
-            </Snackbar>
-          </main>
-        </div>
+              >
+                <MySnackbarContent
+                  onClose={this.handleClose}
+                  variant={this.state.message.variant}
+                  message={this.state.message.body}
+                />
+              </Snackbar>
+            </main>
+          </div>
+        </MuiThemeProvider>
       </AppContext.Provider>
     );
   }
