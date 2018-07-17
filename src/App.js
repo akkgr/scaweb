@@ -77,13 +77,14 @@ const styles = theme => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
-    padding: "0 8px",
+    padding: "0 0 0 0",
     ...theme.mixins.toolbar
   },
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3
+    paddingLeft: theme.spacing.unit * 3,
+    paddingRight: theme.spacing.unit * 3
   }
 });
 
