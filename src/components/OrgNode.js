@@ -103,7 +103,7 @@ class OrgNode extends React.Component {
   }
 
   getData(typeId) {
-    fetch("http://localhost:16726/api/orgnodes/type/" + typeId, {
+    fetch("http://localhost:5000/api/orgnode/type/" + typeId, {
       method: "GET"
     })
       .then(res => {
