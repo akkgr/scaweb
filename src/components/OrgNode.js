@@ -44,6 +44,7 @@ class OrgNode extends React.Component {
       order: "asc",
       orderBy: "viewOrder",
       data: [],
+      filteredData: [],
       page: 0,
       rowsPerPage: 10
     };
@@ -103,7 +104,7 @@ class OrgNode extends React.Component {
   }
 
   getData(typeId) {
-    fetch("http://localhost:5000/api/orgnode/type/" + typeId, {
+    fetch("http://localhost:5000/api/orgnodes/type/" + typeId, {
       method: "GET"
     })
       .then(res => {
@@ -114,7 +115,7 @@ class OrgNode extends React.Component {
         }
       })
       .then(res => {
-        this.setState({ data: res });
+        this.setState({ data: res, filteredData: res });
       })
       .catch(e => {
         this.props.context.showMessage("error", e.toString());
@@ -140,11 +141,30 @@ class OrgNode extends React.Component {
     this.setState({ rowsPerPage: event.target.value });
   };
 
+  handleFilter = value => {
+    var newData = this.state.data.filter(row => {
+      return (
+        row.code.toLowerCase().includes(value.toLowerCase()) ||
+        row.title.toLowerCase().includes(value.toLowerCase()) ||
+        row.appObject.toLowerCase().includes(value.toLowerCase())
+      );
+    });
+    this.setState({ filteredData: newData });
+  };
+
   render() {
     const { classes, context } = this.props;
-    const { path, data, order, orderBy, rowsPerPage, page } = this.state;
+    const {
+      path,
+      filteredData,
+      order,
+      orderBy,
+      rowsPerPage,
+      page
+    } = this.state;
     const emptyRows =
-      rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+      rowsPerPage -
+      Math.min(rowsPerPage, filteredData.length - page * rowsPerPage);
 
     const columnData = [
       {
@@ -181,17 +201,17 @@ class OrgNode extends React.Component {
 
     return (
       <Paper className={classes.root}>
-        <ListToolBar title={path} />
+        <ListToolBar title={path} onFilter={this.handleFilter} />
         <Table className={classes.table}>
           <EnhancedTableHead
             columnData={columnData}
             order={order}
             orderBy={orderBy}
             onRequestSort={this.handleRequestSort}
-            rowCount={data.length}
+            rowCount={filteredData.length}
           />
           <TableBody>
-            {data
+            {filteredData
               .sort(getSorting(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map(n => {
@@ -220,7 +240,7 @@ class OrgNode extends React.Component {
         </Table>
         <TablePagination
           component="div"
-          count={data.length}
+          count={filteredData.length}
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{

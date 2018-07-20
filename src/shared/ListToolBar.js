@@ -24,13 +24,19 @@ const styles = theme => ({
 });
 
 function ListToolBar(props) {
-  const { classes, title } = props;
+  const { classes, title, onFilter } = props;
+
+  var handleChange = e => {
+    onFilter(e.target.value);
+  };
+
   return (
     <Toolbar>
       <Typography variant="title" color="inherit">
         {title}
       </Typography>
       <TextField
+        onChange={handleChange}
         className={classes.menuTitle}
         InputProps={{
           endAdornment: (
@@ -57,7 +63,8 @@ function ListToolBar(props) {
 }
 
 ListToolBar.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  onFilter: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(ListToolBar);
