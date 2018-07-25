@@ -1,13 +1,15 @@
+import OrgNodes from "./components/OrgNodes";
 import OrgNode from "./components/OrgNode";
 
 const indexRoutes = [
-  { path: "/companies", component: OrgNode },
-  { path: "/services", component: OrgNode },
-  { path: "/programs", component: OrgNode },
-  { path: "/areas", component: OrgNode },
-  { path: "/actions", component: OrgNode },
-  { path: "/menu", component: OrgNode },
-  { path: "/submenu", component: OrgNode }
+  { path: "/companies", component: OrgNodes },
+  { path: "/services", component: OrgNodes },
+  { path: "/programs", component: OrgNodes },
+  { path: "/areas", component: OrgNodes },
+  { path: "/actions", component: OrgNodes },
+  { path: "/menu", component: OrgNodes },
+  { path: "/submenu", component: OrgNodes },
+  { path: "/orgnode/:id", component: OrgNode }
 ];
 
 export default indexRoutes;

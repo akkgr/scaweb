@@ -24,10 +24,14 @@ const styles = theme => ({
 });
 
 function ListToolBar(props) {
-  const { classes, title, onFilter } = props;
+  const { classes, title, onFilter, onEdit } = props;
 
   var handleChange = e => {
     onFilter(e.target.value);
+  };
+
+  var handleEdit = e => {
+    onEdit();
   };
 
   return (
@@ -49,7 +53,11 @@ function ListToolBar(props) {
       <IconButton className={classes.button} aria-label="Add">
         <AddIcon />
       </IconButton>
-      <IconButton className={classes.button} aria-label="Edit">
+      <IconButton
+        className={classes.button}
+        aria-label="Edit"
+        onClick={handleEdit}
+      >
         <EditIcon />
       </IconButton>
       <IconButton className={classes.button} aria-label="Delete">
@@ -64,7 +72,8 @@ function ListToolBar(props) {
 
 ListToolBar.propTypes = {
   classes: PropTypes.object.isRequired,
-  onFilter: PropTypes.func.isRequired
+  onFilter: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(ListToolBar);
