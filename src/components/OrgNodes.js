@@ -76,20 +76,19 @@ class OrgNodes extends React.Component {
     fetch("http://localhost:5000/api/orgnodes/type/" + typeId, {
       method: "GET"
     })
-      .then(res => {
-        if (!res.ok) {
-          throw Error(res.statusText);
-        } else {
-          return res.json();
+      .then(res => Promise.all([res, res.json()]))
+      .then(([res, json]) => {
+        if (res.ok) {
+          return json;
         }
+        throw Error(json.Message);
       })
       .then(res => {
         this.setState({ data: res, filteredData: res });
         notify("data fetched", "sucess", 600);
       })
       .catch(e => {
-        this.props.context.showMessage("error", e.toString());
-        notify(e.toString(), "error", 600);
+        this.props.context.showMessage("error", e.message);
       });
   }
 
