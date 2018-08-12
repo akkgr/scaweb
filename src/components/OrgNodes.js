@@ -1,40 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import EnhancedTableHead from "../shared/EnhancedTableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TablePagination from "@material-ui/core/TablePagination";
-import Paper from "@material-ui/core/Paper";
-import ListToolBar from "../shared/ListToolBar";
 import { AppContext } from "../app-context";
-
-const styles = theme => ({
-  root: {
-    width: "100%",
-    marginTop: theme.spacing.unit * 3,
-    overflowX: "auto"
-  },
-  flex: {
-    flex: 1
-  },
-  table: {
-    minWidth: 700
-  }
-});
-
-function getSorting(order, orderBy) {
-  return (a, b) => {
-    if (a[orderBy] < b[orderBy]) return order === "desc" ? 1 : -1;
-    if (a[orderBy] > b[orderBy]) return order === "desc" ? -1 : 1;
-    else {
-      if (a["id"] < b["id"]) return order === "desc" ? 1 : -1;
-      if (a["id"] > b["id"]) return order === "desc" ? -1 : 1;
-    }
-  };
-}
+import notify from "devextreme/ui/notify";
 
 class OrgNodes extends React.Component {
   constructor(props) {
@@ -118,9 +85,11 @@ class OrgNodes extends React.Component {
       })
       .then(res => {
         this.setState({ data: res, filteredData: res });
+        notify("data fetched", "sucess", 600);
       })
       .catch(e => {
         this.props.context.showMessage("error", e.toString());
+        notify(e.toString(), "error", 600);
       });
   }
 
@@ -208,76 +177,12 @@ class OrgNodes extends React.Component {
       }
     ];
 
-    return (
-      <Paper className={classes.root}>
-        <ListToolBar
-          title={path}
-          onFilter={this.handleFilter}
-          onEdit={this.handleEdit}
-        />
-        <Table className={classes.table}>
-          <EnhancedTableHead
-            columnData={columnData}
-            order={order}
-            orderBy={orderBy}
-            onRequestSort={this.handleRequestSort}
-            rowCount={filteredData.length}
-          />
-          <TableBody>
-            {filteredData
-              .sort(getSorting(order, orderBy))
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map(n => {
-                return (
-                  <TableRow
-                    selected={context.selectedNodes[nodeLevel].id === n.id}
-                    key={n.id}
-                    onClick={e =>
-                      context.selectNode(e, nodeLevel, n.id, n.title)
-                    }
-                  >
-                    <TableCell component="th" scope="row">
-                      {n.title}
-                    </TableCell>
-                    <TableCell>{n.code}</TableCell>
-                    <TableCell>{n.isActive === true ? "ΝΑΙ" : "ΟΧΙ"}</TableCell>
-                    <TableCell numeric>{n.viewOrder}</TableCell>
-                    <TableCell>{n.appObject}</TableCell>
-                  </TableRow>
-                );
-              })}
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 48 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-        <TablePagination
-          component="div"
-          count={filteredData.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          backIconButtonProps={{
-            "aria-label": "Previous Page"
-          }}
-          nextIconButtonProps={{
-            "aria-label": "Next Page"
-          }}
-          onChangePage={this.handleChangePage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
-        />
-      </Paper>
-    );
+    return <div />;
   }
 }
 
-OrgNodes.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(props => (
+export default props => (
   <AppContext.Consumer>
     {context => <OrgNodes {...props} context={context} />}
   </AppContext.Consumer>
-));
+);

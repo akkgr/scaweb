@@ -1,18 +1,8 @@
 import React from "react";
 import Form from "devextreme-react/ui/form";
-import { withStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import "devextreme/dist/css/dx.common.css";
 import "devextreme/dist/css/dx.material.teal.light.css";
 import "./OrgNode.css";
-
-const styles = theme => ({
-  root: {
-    width: "100%",
-    marginTop: theme.spacing.unit * 3,
-    overflowX: "auto"
-  }
-});
 
 const formItems = [
   {
@@ -77,12 +67,8 @@ class OrgNode extends React.Component {
 
   render() {
     const { classes } = this.props;
-    return (
-      <Paper className={classes.root}>
-        <Form formData={this.state.data} items={formItems} />
-      </Paper>
-    );
+    return <Form formData={this.state.data} items={formItems} />;
   }
 }
 
-export default withStyles(styles)(OrgNode);
+export default OrgNode;
