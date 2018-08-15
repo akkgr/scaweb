@@ -1,7 +1,17 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { AppContext } from "../app-context";
+import DataGrid, {
+  Column,
+  Grouping,
+  GroupPanel,
+  Pager,
+  Paging,
+  SearchPanel,
+  Selection
+} from "devextreme-react/ui/data-grid";
 import notify from "devextreme/ui/notify";
+
+const pageSizes = [10, 25, 50, 100];
 
 class OrgNodes extends React.Component {
   constructor(props) {
@@ -88,7 +98,7 @@ class OrgNodes extends React.Component {
         notify("data fetched", "sucess", 600);
       })
       .catch(e => {
-        this.props.context.showMessage("error", e.message);
+        notify(e.message, "error", 600);
       });
   }
 
@@ -129,54 +139,27 @@ class OrgNodes extends React.Component {
   };
 
   render() {
-    const { classes, context } = this.props;
-    const {
-      path,
-      filteredData,
-      order,
-      orderBy,
-      rowsPerPage,
-      page,
-      nodeLevel
-    } = this.state;
-    const emptyRows =
-      rowsPerPage -
-      Math.min(rowsPerPage, filteredData.length - page * rowsPerPage);
+    return (
+      <DataGrid
+        allowColumnReordering={true}
+        showBorders={true}
+        dataSource={this.state.data}
+      >
+        <GroupPanel visible={true} />
+        <SearchPanel visible={true} highlightCaseSensitive={true} />
+        <Grouping />
+        <Selection mode={"multiple"} />
 
-    const columnData = [
-      {
-        id: "title",
-        numeric: false,
-        disablePadding: false,
-        label: "Όνομα"
-      },
-      {
-        id: "code",
-        numeric: true,
-        disablePadding: false,
-        label: "Κωδικός"
-      },
-      {
-        id: "isActive",
-        numeric: false,
-        disablePadding: false,
-        label: "Ενεργή"
-      },
-      {
-        id: "viewOrder",
-        numeric: true,
-        disablePadding: false,
-        label: "Σειρά Εμφάνισης"
-      },
-      {
-        id: "appObject",
-        numeric: false,
-        disablePadding: false,
-        label: "Application Object"
-      }
-    ];
+        <Column dataField={"title"} />
+        <Column dataField={"code"} />
+        <Column dataField={"isActive"} />
+        <Column dataField={"viewOrder"} />
+        <Column dataField={"appObject"} />
 
-    return <div />;
+        <Pager allowedPageSizes={pageSizes} showPageSizeSelector={true} />
+        <Paging defaultPageSize={10} />
+      </DataGrid>
+    );
   }
 }
 

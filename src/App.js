@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { AppContext, defaultNodes } from "./app-context";
 import TreeView from "devextreme-react/ui/tree-view";
+import Toolbar from "devextreme-react/ui/toolbar";
 import indexRoutes from "./routes.js";
 import "devextreme/dist/css/dx.common.css";
 import "devextreme/dist/css/dx.light.compact.css";
@@ -50,8 +51,33 @@ class App extends React.Component {
   }
 
   render() {
+    const items = [
+      {
+        locateInMenu: "always",
+        text: "Save",
+        onClick: () => {
+          notify("Save option has been clicked!");
+        }
+      },
+      {
+        locateInMenu: "always",
+        text: "Print",
+        onClick: () => {
+          notify("Print option has been clicked!");
+        }
+      },
+      {
+        locateInMenu: "always",
+        text: "Settings",
+        onClick: () => {
+          notify("Settings option has been clicked!");
+        }
+      }
+    ];
+
     return (
       <AppContext.Provider value={this.state.context}>
+        <Toolbar items={items} />
         <div className={"container"}>
           <div className={"left-content"}>
             <TreeView

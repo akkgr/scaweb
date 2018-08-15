@@ -1,7 +1,5 @@
 import React from "react";
 import Form from "devextreme-react/ui/form";
-import "devextreme/dist/css/dx.common.css";
-import "devextreme/dist/css/dx.material.teal.light.css";
 import "./OrgNode.css";
 
 const formItems = [
@@ -66,7 +64,6 @@ class OrgNode extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
     return <Form formData={this.state.data} items={formItems} />;
   }
 }

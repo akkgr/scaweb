@@ -11,6 +11,6 @@ export const defaultNodes = [
 ];
 
 export const AppContext = React.createContext({
-  selectedNodes: defaultNodes,
+  user: {},
   selectNode: (e, id, title) => {}
 });
