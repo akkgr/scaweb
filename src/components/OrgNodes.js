@@ -2,28 +2,27 @@ import React from "react";
 import { AppContext } from "../app-context";
 import DataGrid, {
   Column,
-  Grouping,
   GroupPanel,
   Pager,
   Paging,
   SearchPanel,
-  Selection
+  Selection,
+  Summary,
+  TotalItem,
+  FilterRow,
+  Editing
 } from "devextreme-react/ui/data-grid";
 import notify from "devextreme/ui/notify";
 
-const pageSizes = [10, 25, 50, 100];
+const pageSizes = [10, 20, 50, 100];
 
 class OrgNodes extends React.Component {
   constructor(props) {
     super(props);
     this.getData = this.getData.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
     this.state = {
-      order: "asc",
-      orderBy: "viewOrder",
       data: [],
-      filteredData: [],
-      page: 0,
-      rowsPerPage: 10,
       nodeLevel: 0
     };
   }
@@ -102,41 +101,9 @@ class OrgNodes extends React.Component {
       });
   }
 
-  handleRequestSort = (event, property) => {
-    const orderBy = property;
-    let order = "desc";
-
-    if (this.state.orderBy === property && this.state.order === "desc") {
-      order = "asc";
-    }
-
-    this.setState({ order, orderBy });
-  };
-
-  handleChangePage = (event, page) => {
-    this.setState({ page });
-  };
-
-  handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value });
-  };
-
-  handleFilter = value => {
-    var newData = this.state.data.filter(row => {
-      return (
-        row.code.toLowerCase().includes(value.toLowerCase()) ||
-        row.title.toLowerCase().includes(value.toLowerCase()) ||
-        row.appObject.toLowerCase().includes(value.toLowerCase())
-      );
-    });
-    this.setState({ filteredData: newData });
-  };
-
-  handleEdit = e => {
-    const { history, context } = this.props;
-    const { nodeLevel } = this.state;
-    history.push("/orgnode/" + context.selectedNodes[nodeLevel].id);
-  };
+  handleUpdate(e) {
+    console.log(e.data);
+  }
 
   render() {
     return (
@@ -144,20 +111,24 @@ class OrgNodes extends React.Component {
         allowColumnReordering={true}
         showBorders={true}
         dataSource={this.state.data}
+        showRowLines={true}
+        onRowUpdated={this.handleUpdate}
       >
         <GroupPanel visible={true} />
         <SearchPanel visible={true} highlightCaseSensitive={true} />
-        <Grouping />
-        <Selection mode={"multiple"} />
-
+        <Selection mode={"single"} />
+        <FilterRow visible={true} />
         <Column dataField={"title"} />
         <Column dataField={"code"} />
         <Column dataField={"isActive"} />
         <Column dataField={"viewOrder"} />
         <Column dataField={"appObject"} />
-
+        <Summary>
+          <TotalItem column={"title"} summaryType={"count"} />
+        </Summary>
         <Pager allowedPageSizes={pageSizes} showPageSizeSelector={true} />
-        <Paging defaultPageSize={10} />
+        <Paging defaultPageSize={20} />
+        <Editing mode="popup" allowUpdating="true" />
       </DataGrid>
     );
   }

@@ -1,18 +1,20 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 import { AppContext, defaultNodes } from "./app-context";
 import TreeView from "devextreme-react/ui/tree-view";
 import Toolbar from "devextreme-react/ui/toolbar";
 import indexRoutes from "./routes.js";
 import "devextreme/dist/css/dx.common.css";
-import "devextreme/dist/css/dx.light.compact.css";
+import "devextreme/dist/css/dx.softblue.compact.css";
 import notify from "devextreme/ui/notify";
 import "./app.css";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-
+    this.handleTreeViewSelectionChange = this.handleTreeViewSelectionChange.bind(
+      this
+    );
     this.state = {
       context: {
         selectedNodes: defaultNodes,
@@ -48,6 +50,13 @@ class App extends React.Component {
         this.props.context.showMessage("error", e.toString());
         notify(e.toString(), "error", 600);
       });
+  }
+
+  handleTreeViewSelectionChange(e) {
+    const org = e.itemData;
+    if (org.appObject) {
+      this.props.history.push("/" + org.appObject);
+    }
   }
 
   render() {
@@ -110,4 +119,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default withRouter(App);
