@@ -10,7 +10,8 @@ import DataGrid, {
   Summary,
   TotalItem,
   FilterRow,
-  Editing
+  Editing,
+  Export
 } from "devextreme-react/ui/data-grid";
 import notify from "devextreme/ui/notify";
 
@@ -114,6 +115,7 @@ class OrgNodes extends React.Component {
         showRowLines={true}
         onRowUpdated={this.handleUpdate}
       >
+        <Export enabled={true} />
         <GroupPanel visible={true} />
         <SearchPanel visible={true} highlightCaseSensitive={true} />
         <Selection mode={"single"} />
