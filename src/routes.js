@@ -1,6 +1,6 @@
-import OrgNodes from "./components/OrgNodes";
-import OrgNode from "./components/OrgNode";
-import Login from "./components/Login";
+import OrgNodes from "./views/OrgNodes";
+import OrgNode from "./views/OrgNode";
+import Login from "./views/Login";
 
 const indexRoutes = [
   { path: "/login", component: Login },

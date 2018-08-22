@@ -1,6 +1,6 @@
 import React from "react";
 import Form from "devextreme-react/ui/form";
-import "./OrgNode.css";
+import notify from "devextreme/ui/notify";
 
 const formItems = [
   {
@@ -59,7 +59,7 @@ class OrgNode extends React.Component {
         this.setState({ data: res });
       })
       .catch(e => {
-        this.props.context.showMessage("error", e.toString());
+        notify(e.message, "error", 600);
       });
   }
 

@@ -1,21 +1,8 @@
 import React from "react";
 import { AppContext } from "../app-context";
-import DataGrid, {
-  Column,
-  GroupPanel,
-  Pager,
-  Paging,
-  SearchPanel,
-  Selection,
-  Summary,
-  TotalItem,
-  FilterRow,
-  Editing,
-  Export
-} from "devextreme-react/ui/data-grid";
+import { Column } from "devextreme-react/ui/data-grid";
 import notify from "devextreme/ui/notify";
-
-const pageSizes = [10, 20, 50, 100];
+import DataTable from "../components/DataTable";
 
 class OrgNodes extends React.Component {
   constructor(props) {
@@ -102,36 +89,23 @@ class OrgNodes extends React.Component {
       });
   }
 
-  handleUpdate(e) {
-    console.log(e.data);
+  handleUpdate(data) {
+    console.log(data);
   }
 
   render() {
     return (
-      <DataGrid
-        allowColumnReordering={true}
-        showBorders={true}
-        dataSource={this.state.data}
-        showRowLines={true}
-        onRowUpdated={this.handleUpdate}
+      <DataTable
+        data={this.state.data}
+        countField={"title"}
+        update={this.handleUpdate}
       >
-        <Export enabled={true} />
-        <GroupPanel visible={true} />
-        <SearchPanel visible={true} highlightCaseSensitive={true} />
-        <Selection mode={"single"} />
-        <FilterRow visible={true} />
         <Column dataField={"title"} />
         <Column dataField={"code"} />
         <Column dataField={"isActive"} />
         <Column dataField={"viewOrder"} />
         <Column dataField={"appObject"} />
-        <Summary>
-          <TotalItem column={"title"} summaryType={"count"} />
-        </Summary>
-        <Pager allowedPageSizes={pageSizes} showPageSizeSelector={true} />
-        <Paging defaultPageSize={20} />
-        <Editing mode="popup" allowUpdating="true" />
-      </DataGrid>
+      </DataTable>
     );
   }
 }

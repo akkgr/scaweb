@@ -47,7 +47,6 @@ class App extends React.Component {
         );
       })
       .catch(e => {
-        this.props.context.showMessage("error", e.toString());
         notify(e.toString(), "error", 600);
       });
   }
@@ -86,7 +85,9 @@ class App extends React.Component {
 
     return (
       <AppContext.Provider value={this.state.context}>
-        <Toolbar items={items} />
+        <div className={"topbar"}>
+          <Toolbar items={items} />
+        </div>
         <div className={"container"}>
           <div className={"left-content"}>
             <TreeView

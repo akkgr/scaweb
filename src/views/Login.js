@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 import Form from "devextreme-react/ui/form";
 import notify from "devextreme/ui/notify";
-import auth from "../auth";
+import auth from "../modules/auth";
 
 class Login extends Component {
   constructor(props) {
@@ -86,7 +86,7 @@ class Login extends Component {
             itemType: "button",
             horizontalAlignment: "right",
             buttonOptions: {
-              text: "Register",
+              text: "Login",
               type: "success",
               onClick: this.login
             }
