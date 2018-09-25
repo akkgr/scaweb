@@ -8,6 +8,8 @@ import 'devextreme/dist/css/dx.softblue.compact.css'
 import notify from 'devextreme/ui/notify'
 import './app.css'
 import TopBar from './components/TopBar'
+import PrivateRoute from './components/PrivateRoute'
+import Login from './views/Login'
 
 class App extends React.Component {
   constructor(props) {
@@ -71,19 +73,20 @@ class App extends React.Component {
               dataSource={this.state.data}
               keyExpr={'id'}
               parentIdExpr={'parentId'}
-              displayExpr="orgNode.title"
+              displayExpr="title"
               selectionMode={'single'}
               selectByClick={true}
               onItemSelectionChanged={this.handleTreeViewSelectionChange}
-              // searchEnabled={true}
-              // searchMode="contains"
+              searchEnabled={true}
+              searchMode="contains"
             />
           </div>
           <div className={'right-content'}>
             <Switch>
+              <Route path="/login" component={Login} />
               {indexRoutes.map((prop, key) => {
                 return (
-                  <Route
+                  <PrivateRoute
                     path={prop.path}
                     component={prop.component}
                     key={key}

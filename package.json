@@ -4,14 +4,24 @@
   "private": true,
   "dependencies": {
     "devextreme": "^18.1.6",
+<<<<<<< HEAD
     "devextreme-react": "^18.1.6-alpha.11",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+=======
+    "devextreme-react": "^18.1.5-alpha.10",
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0",
+>>>>>>> 42217f43ae7d2675df5953f79d929b5d65d4c7fb
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.5"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "flow-bin": "^0.81.0"
+=======
+    "flow-bin": "^0.80.0"
+>>>>>>> 42217f43ae7d2675df5953f79d929b5d65d4c7fb
   },
   "scripts": {
     "flow": "flow",
