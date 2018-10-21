@@ -13,17 +13,19 @@ class MyHeader extends React.Component {
   render() {
     return (
       <Header className="header">
-        <div className="logo">
-          <span>SCA</span>
-        </div>
         <Menu
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={['2']}
           className="myheader">
-          <Menu.Item key="1">nav 1</Menu.Item>
-          <Menu.Item key="2">nav 2</Menu.Item>
-          <Menu.Item key="3">nav 3</Menu.Item>
+          <Menu.Item key="1" className="logo">
+            SCA
+          </Menu.Item>
+          <Menu.Item key="2">nav 1</Menu.Item>
+          <Menu.Item key="3">nav 2</Menu.Item>
+          <Menu.Item key="4" style={{ float: 'right' }}>
+            User
+          </Menu.Item>
         </Menu>
       </Header>
     )
