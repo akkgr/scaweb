@@ -1,294 +1,133 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
-import PropTypes from "prop-types";
-import classNames from "classnames";
-import { withStyles } from "@material-ui/core/styles";
-import Snackbar from "@material-ui/core/Snackbar";
-import Drawer from "@material-ui/core/Drawer";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import { nodeFolderListItems, menuFolderListItems } from "./tileData";
-import indexRoutes from "./routes.js";
-import { AppContext, defaultNodes } from "./app-context";
-import MySnackbarContent from "./shared/CustomizedSnackbars";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import "./app.css";
+import React from 'react'
 
-const drawerWidth = 240;
+import { AppContext, defaultNodes } from './app-context'
+import './app.css'
 
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    zIndex: 1,
-    overflow: "hidden",
-    position: "relative",
-    display: "flex"
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 36
-  },
-  hide: {
-    display: "none"
-  },
-  drawerPaper: {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    width: theme.spacing.unit * 7,
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing.unit * 9
-    }
-  },
-  toolbar: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 0 0 0",
-    ...theme.mixins.toolbar
-  },
-  content: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-    paddingLeft: theme.spacing.unit * 3,
-    paddingRight: theme.spacing.unit * 3
-  }
-});
+import { Layout, Menu, Breadcrumb, Icon } from 'antd'
+
+const { SubMenu } = Menu
+const { Header, Content, Sider } = Layout
 
 class App extends React.Component {
   constructor(props) {
-    super(props);
-
-    this.selectNode = (e, index, id, title) => {
-      const nodes = [...this.state.context.selectedNodes];
-      nodes[index].id = id;
-      nodes[index].title = title;
-      this.setState({
-        context: {
-          selectedNodes: nodes,
-          selectNode: this.selectNode
-        }
-      });
-    };
-
-    this.showMessage = (variant, body) => {
-      this.setState({
-        message: {
-          open: true,
-          variant: variant,
-          body: body
-        }
-      });
-    };
+    super(props)
 
     this.state = {
-      open: false,
-      message: {
-        open: false,
-        variant: "info",
-        body: ""
-      },
       context: {
         selectedNodes: defaultNodes,
         selectNode: this.selectNode,
         showMessage: this.showMessage
       }
-    };
+    }
   }
 
-  handleDrawerOpen = () => {
-    this.setState({ open: true });
-  };
+  selectNode(e, index, id, title) {
+    const nodes = [...this.state.context.selectedNodes]
+    nodes[index].id = id
+    nodes[index].title = title
+    this.setState({
+      context: {
+        selectedNodes: nodes,
+        selectNode: this.selectNode
+      }
+    })
+  }
 
-  handleDrawerClose = () => {
-    this.setState({ open: false });
-  };
-
-  handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
+  showMessage(variant, body) {
     this.setState({
       message: {
-        open: false,
-        variant: this.state.message.variant,
-        body: ""
+        open: true,
+        variant: variant,
+        body: body
       }
-    });
-  };
+    })
+  }
 
   render() {
-    const { classes, theme } = this.props;
-
-    const colorTheme = createMuiTheme({
-      palette: {
-        primary: {
-          light: "#B2DFDB",
-          main: "#009688",
-          dark: "#004D40",
-          contrastText: "#fff"
-        },
-        secondary: {
-          light: "#FFE0B2",
-          main: "#FF9800",
-          dark: "#E65100",
-          contrastText: "#fff"
-        },
-        error: {
-          light: "#FFCDD2",
-          main: "#F44336",
-          dark: "#B71C1C",
-          contrastText: "#fff"
-        },
-        background: {
-          paper: "#EEEEEE",
-          default: "#E0E0E0"
-        },
-        // Used by `getContrastText()` to maximize the contrast between the background and
-        // the text.
-        contrastThreshold: 3,
-        // Used to shift a color's luminance by approximately
-        // two indexes within its tonal palette.
-        // E.g., shift from Red 500 to Red 300 or Red 700.
-        tonalOffset: 0.2
-      },
-      overrides: {
-        MuiTableRow: {
-          root: {
-            "&$selected": {
-              backgroundColor: "#BDBDBD"
-            }
-          }
-        }
-      }
-    });
-
     return (
       <AppContext.Provider value={this.state.context}>
-        <MuiThemeProvider theme={colorTheme}>
-          <div className={classes.root}>
-            <AppBar
-              position="absolute"
-              className={classNames(
-                classes.appBar,
-                this.state.open && classes.appBarShift
-              )}
-            >
-              <Toolbar disableGutters={!this.state.open}>
-                <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  onClick={this.handleDrawerOpen}
-                  className={classNames(
-                    classes.menuButton,
-                    this.state.open && classes.hide
-                  )}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Typography variant="title" color="inherit" noWrap>
-                  SCA
-                </Typography>
-              </Toolbar>
-            </AppBar>
-            <Drawer
-              variant="permanent"
-              classes={{
-                paper: classNames(
-                  classes.drawerPaper,
-                  !this.state.open && classes.drawerPaperClose
-                )
-              }}
-              open={this.state.open}
-            >
-              <div className={classes.toolbar}>
-                <IconButton onClick={this.handleDrawerClose}>
-                  {theme.direction === "rtl" ? (
-                    <ChevronRightIcon />
-                  ) : (
-                    <ChevronLeftIcon />
-                  )}
-                </IconButton>
-              </div>
-              <Divider />
-              <List>{nodeFolderListItems}</List>
-              <Divider />
-              <List>{menuFolderListItems}</List>
-              <Divider />
-            </Drawer>
-            <main className={classes.content}>
-              <div className={classes.toolbar} />
-              <Switch>
-                {indexRoutes.map((prop, key) => {
-                  return (
-                    <Route
-                      path={prop.path}
-                      component={prop.component}
-                      key={key}
-                    />
-                  );
-                })}
-              </Switch>
-              <Snackbar
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left"
-                }}
-                open={this.state.message.open}
-                autoHideDuration={6000}
-                onClose={this.handleClose}
-              >
-                <MySnackbarContent
-                  onClose={this.handleClose}
-                  variant={this.state.message.variant}
-                  message={this.state.message.body}
-                />
-              </Snackbar>
-            </main>
-          </div>
-        </MuiThemeProvider>
+        <Layout>
+          <Header className="header">
+            <div className="logo" />
+            <Menu
+              theme="dark"
+              mode="horizontal"
+              defaultSelectedKeys={['2']}
+              style={{ lineHeight: '64px' }}>
+              <Menu.Item key="1">nav 1</Menu.Item>
+              <Menu.Item key="2">nav 2</Menu.Item>
+              <Menu.Item key="3">nav 3</Menu.Item>
+            </Menu>
+          </Header>
+          <Layout>
+            <Sider width={200} style={{ background: '#fff' }}>
+              <Menu
+                mode="inline"
+                defaultSelectedKeys={['1']}
+                defaultOpenKeys={['sub1']}
+                style={{ height: '100%', borderRight: 0 }}>
+                <SubMenu
+                  key="sub1"
+                  title={
+                    <span>
+                      <Icon type="user" />
+                      subnav 1
+                    </span>
+                  }>
+                  <Menu.Item key="1">option1</Menu.Item>
+                  <Menu.Item key="2">option2</Menu.Item>
+                  <Menu.Item key="3">option3</Menu.Item>
+                  <Menu.Item key="4">option4</Menu.Item>
+                </SubMenu>
+                <SubMenu
+                  key="sub2"
+                  title={
+                    <span>
+                      <Icon type="laptop" />
+                      subnav 2
+                    </span>
+                  }>
+                  <Menu.Item key="5">option5</Menu.Item>
+                  <Menu.Item key="6">option6</Menu.Item>
+                  <Menu.Item key="7">option7</Menu.Item>
+                  <Menu.Item key="8">option8</Menu.Item>
+                </SubMenu>
+                <SubMenu
+                  key="sub3"
+                  title={
+                    <span>
+                      <Icon type="notification" />
+                      subnav 3
+                    </span>
+                  }>
+                  <Menu.Item key="9">option9</Menu.Item>
+                  <Menu.Item key="10">option10</Menu.Item>
+                  <Menu.Item key="11">option11</Menu.Item>
+                  <Menu.Item key="12">option12</Menu.Item>
+                </SubMenu>
+              </Menu>
+            </Sider>
+            <Layout style={{ padding: '0 24px 24px' }}>
+              <Breadcrumb style={{ margin: '16px 0' }}>
+                <Breadcrumb.Item>Home</Breadcrumb.Item>
+                <Breadcrumb.Item>List</Breadcrumb.Item>
+                <Breadcrumb.Item>App</Breadcrumb.Item>
+              </Breadcrumb>
+              <Content
+                style={{
+                  background: '#fff',
+                  padding: 24,
+                  margin: 0,
+                  minHeight: 280
+                }}>
+                Content
+              </Content>
+            </Layout>
+          </Layout>
+        </Layout>
       </AppContext.Provider>
-    );
+    )
   }
 }
 
-App.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
-};
-
-export default withStyles(styles, { withTheme: true })(App);
+export default App
