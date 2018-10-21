@@ -6,4 +6,34 @@
   background: rgba(255, 255, 255, 0.2);
   margin: 16px 28px 16px 0;
   float: left;
+  color: #fff;
+}
+
+.sider {
+  background: #fff;
+  widows: 200px;
+}
+
+.main {
+  padding: 0 24px 24px;
+}
+
+.content {
+  background: #fff;
+  padding: 24;
+  margin: 0;
+  min-height: 280;
+}
+
+.myheader {
+  line-height: 64px;
+}
+
+.mymenu {
+  height: 100%;
+  border-right: 0;
+}
+
+.bctop {
+  margin: 16px 0;
 }
