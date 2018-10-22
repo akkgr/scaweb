@@ -1,71 +1,103 @@
 import React from 'react'
-
-import { AppContext, defaultNodes } from './app-context'
+import { Switch, Route, Link, withRouter } from 'react-router-dom'
+import AppContext from './app-context'
 import './app.css'
+import { Layout, Menu, Breadcrumb, Icon, Spin, notification } from 'antd'
+import OrgTreeNodes from './Views/OrgTreeNodes'
 
-import { Layout, Breadcrumb } from 'antd'
-import MyHeader from './Components/MyHeader'
-import MyMenu from './Components/MyMenu'
-
-const { Content, Sider } = Layout
+const { Header, Content, Footer } = Layout
 
 class App extends React.Component {
   constructor(props) {
     super(props)
-
+    this.selectNode = this.selectNode.bind(this)
+    this.showMessage = this.showMessage.bind(this)
+    this.showLoading = this.showLoading.bind(this)
     this.state = {
+      loading: false,
       context: {
-        selectedNodes: defaultNodes,
+        user: {},
+        selectedNodes: [],
         selectNode: this.selectNode,
-        showMessage: this.showMessage
+        showMessage: this.showMessage,
+        showLoading: this.showLoading
       }
     }
   }
 
-  selectNode(e, index, id, title) {
-    const nodes = [...this.state.context.selectedNodes]
-    nodes[index].id = id
-    nodes[index].title = title
+  selectNode(nodes) {
     this.setState({
       context: {
+        user: {},
         selectedNodes: nodes,
-        selectNode: this.selectNode
+        selectNode: this.selectNode,
+        showMessage: this.showMessage,
+        showLoading: this.showLoading
       }
+    })
+    this.props.history.push(nodes[0].appObject)
+  }
+
+  showMessage(type, message, description) {
+    notification[type]({
+      message: message,
+      description: description
     })
   }
 
-  showMessage(variant, body) {
+  showLoading(b) {
     this.setState({
-      message: {
-        open: true,
-        variant: variant,
-        body: body
-      }
+      loading: b
     })
   }
 
   render() {
     return (
       <AppContext.Provider value={this.state.context}>
-        <Layout>
-          <MyHeader />
-          <Layout>
-            <Sider className="sider">
-              <MyMenu />
-            </Sider>
-            <Layout className="main">
-              <Breadcrumb className="bctop">
-                <Breadcrumb.Item>Home</Breadcrumb.Item>
-                <Breadcrumb.Item>List</Breadcrumb.Item>
-                <Breadcrumb.Item>App</Breadcrumb.Item>
-              </Breadcrumb>
-              <Content className="content">Content</Content>
-            </Layout>
-          </Layout>
+        <Layout className="layout">
+          <Header>
+            <div className="logo">SCA</div>
+            <Menu
+              theme="dark"
+              mode="horizontal"
+              defaultSelectedKeys={['1']}
+              style={{ lineHeight: '64px' }}>
+              <Menu.Item key="1">
+                <Link to="/" className="nav-text">
+                  <Icon type="home" />
+                  Home
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="2">nav 2</Menu.Item>
+              <Menu.Item key="3">nav 3</Menu.Item>
+            </Menu>
+          </Header>
+          <Content style={{ padding: '0 50px' }}>
+            <Breadcrumb style={{ margin: '16px 0' }}>
+              <Breadcrumb.Item>Home</Breadcrumb.Item>
+              {this.state.context.selectedNodes.reverse().map(item => {
+                return (
+                  <Breadcrumb.Item key={item.id}>
+                    {item.node.title}
+                  </Breadcrumb.Item>
+                )
+              })}
+            </Breadcrumb>
+            <Spin spinning={this.state.loading} size="large">
+              <div style={{ background: '#fff', padding: 24, minHeight: 480 }}>
+                <Switch>
+                  <Route path="/" component={OrgTreeNodes} />
+                </Switch>
+              </div>
+            </Spin>
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>
+            Social Care Actions ©2018 Created by Cinnamon
+          </Footer>
         </Layout>
       </AppContext.Provider>
     )
   }
 }
 
-export default App
+export default withRouter(App)
