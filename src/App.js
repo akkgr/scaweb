@@ -35,7 +35,9 @@ class App extends React.Component {
         showLoading: this.showLoading
       }
     })
-    this.props.history.push(nodes[0].appObject)
+    if (nodes[0] && nodes[0].appObject) {
+      this.props.history.push(nodes[0].appObject)
+    }
   }
 
   showMessage(type, message, description) {
@@ -56,7 +58,6 @@ class App extends React.Component {
       <AppContext.Provider value={this.state.context}>
         <Layout className="layout">
           <Header>
-            <div className="logo">SCA</div>
             <Menu
               theme="dark"
               mode="horizontal"
