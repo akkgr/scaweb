@@ -55,7 +55,7 @@ class OrgTreeNodes extends React.Component {
       })
       .catch(exception => {
         this.props.context.showLoading(false)
-        console.log(exception.message)
+        this.props.context.showMessage('error', 'sca', exception.message)
       })
   }
 
