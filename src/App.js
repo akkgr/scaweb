@@ -4,6 +4,8 @@ import AppContext from './app-context'
 import './app.css'
 import { Layout, Menu, Breadcrumb, Icon, Spin, notification } from 'antd'
 import OrgTreeNodes from './Views/OrgTreeNodes'
+import PrivateRoute from './Components/PrivateRouter'
+import Login from './Views/Login'
 
 const { Header, Content, Footer } = Layout
 
@@ -69,8 +71,13 @@ class App extends React.Component {
                   Home
                 </Link>
               </Menu.Item>
-              <Menu.Item key="2">nav 2</Menu.Item>
-              <Menu.Item key="3">nav 3</Menu.Item>
+              <Menu.Item key="2">
+                <Link to="/tree" className="nav-text">
+                  <Icon type="home" />
+                  nav 1
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="3">nav 2</Menu.Item>
             </Menu>
           </Header>
           <Content style={{ padding: '0 50px' }}>
@@ -87,7 +94,12 @@ class App extends React.Component {
             <Spin spinning={this.state.loading} size="large">
               <div style={{ background: '#fff', padding: 24, minHeight: 480 }}>
                 <Switch>
-                  <Route path="/" component={OrgTreeNodes} />
+                  <PrivateRoute
+                    path="/tree"
+                    isAuthenticated={this.state.context.user.isAuthenticated}
+                    component={OrgTreeNodes}
+                  />
+                  <Route path="/login" component={Login} />
                 </Switch>
               </div>
             </Spin>
