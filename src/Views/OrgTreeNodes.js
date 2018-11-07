@@ -21,6 +21,7 @@ const stringSimplify = value => {
 }
 
 class OrgTreeNodes extends React.Component {
+  static contextType = AppContext
   constructor(props) {
     super(props)
     this.nodeSelected = this.nodeSelected.bind(this)
@@ -36,15 +37,16 @@ class OrgTreeNodes extends React.Component {
   }
 
   componentDidMount() {
-    this.props.context.showLoading(true)
+    this.context.showLoading(true)
     fetch('http://localhost:5000/api/orgtreenodes/active', {
       headers: {
-        'Content-Type': 'application/json; charset=utf-8'
+        'Content-Type': 'application/json; charset=utf-8',
+        Authorization: 'Bearer ' + this.context.user.token
       }
     })
       .then(response => Promise.all([response, response.json()]))
       .then(([response, json]) => {
-        this.props.context.showLoading(false)
+        this.context.showLoading(false)
         if (!response.ok) {
           throw new Error(json.message)
         }
@@ -54,8 +56,8 @@ class OrgTreeNodes extends React.Component {
         })
       })
       .catch(exception => {
-        this.props.context.showLoading(false)
-        this.props.context.showMessage('error', 'sca', exception.message)
+        this.context.showLoading(false)
+        this.context.showMessage('error', 'sca', exception.message)
       })
   }
 
@@ -76,7 +78,7 @@ class OrgTreeNodes extends React.Component {
         appLink = findNode(appLink.parentId)
       } while (appLink)
 
-      this.props.context.selectNode(nodes)
+      this.context.selectNode(nodes)
     }
   }
 
@@ -153,8 +155,4 @@ class OrgTreeNodes extends React.Component {
   }
 }
 
-export default props => (
-  <AppContext.Consumer>
-    {ctx => <OrgTreeNodes {...props} context={ctx} />}
-  </AppContext.Consumer>
-)
+export default OrgTreeNodes

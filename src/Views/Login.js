@@ -1,9 +1,10 @@
 import React from 'react'
-import { Redirect } from 'react-router-dom'
 import { Form, Icon, Input, Button } from 'antd'
 import AppContext from './../app-context'
 
+const jwtDecode = require('jwt-decode')
 const FormItem = Form.Item
+const url = 'http://localhost:5000/api/token'
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field])
@@ -11,7 +12,6 @@ function hasErrors(fieldsError) {
 
 class LoginForm extends React.Component {
   static contextType = AppContext
-  state = { redirectToReferrer: false }
 
   componentDidMount() {
     // To disabled submit button at the beginning.
@@ -22,16 +22,39 @@ class LoginForm extends React.Component {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.context.user = { isAuthenticated: true }
-        let { from } = this.props.location.state || { from: { pathname: '/' } }
-        this.props.history.push(from)
+        this.context.showLoading(true)
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: values.userName,
+            password: values.password
+          })
+        })
+          .then(response => Promise.all([response, response.json()]))
+          .then(([response, json]) => {
+            if (!response.ok) {
+              throw new Error(json.error)
+            }
+            this.context.showLoading(false)
+            const decoded = jwtDecode(json.token)
+            this.context.user = {
+              isAuthenticated: true,
+              token: json.token,
+              ...decoded
+            }
+            let { from } = this.props.location.state || {
+              from: { pathname: '/' }
+            }
+            this.props.history.push(from)
+          })
+          .catch(exception => {
+            this.context.showLoading(false)
+            this.context.showMessage('error', 'sca', exception.message)
+          })
       }
-    })
-  }
-
-  login = () => {
-    this.state.authenticate(() => {
-      this.setState({ redirectToReferrer: true })
     })
   }
 
