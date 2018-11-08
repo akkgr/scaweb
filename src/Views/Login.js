@@ -36,9 +36,10 @@ class LoginForm extends React.Component {
           .then(response => Promise.all([response, response.json()]))
           .then(([response, json]) => {
             if (!response.ok) {
-              throw new Error(json.error)
+              throw new Error(json.error || json.message)
             }
             this.context.showLoading(false)
+            localStorage.setItem('token', json.token)
             const decoded = jwtDecode(json.token)
             this.context.user = {
               isAuthenticated: true,
