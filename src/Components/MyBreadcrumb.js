@@ -1,16 +1,21 @@
 import React from 'react'
-import { Breadcrumb } from 'antd'
+import { Tag } from 'antd'
 
 function MyBreadcrumb(props) {
   const { context } = props
   return (
-    <Breadcrumb style={{ margin: '16px 0' }}>
-      {context.selectedNodes.reverse().map(item => {
-        return (
-          <Breadcrumb.Item key={item.id}>{item.node.title}</Breadcrumb.Item>
-        )
-      })}
-    </Breadcrumb>
+    <div style={{ margin: '16px 0' }}>
+      {context.selectedNodes
+        .slice(0)
+        .reverse()
+        .map(item => {
+          return (
+            <Tag color="blue" key={item.id}>
+              {item.node.title}
+            </Tag>
+          )
+        })}
+    </div>
   )
 }
 

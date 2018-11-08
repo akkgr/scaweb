@@ -19,11 +19,30 @@ class App extends React.Component {
     this.showMessage = this.showMessage.bind(this)
     this.showLoading = this.showLoading.bind(this)
     this.logout = this.logout.bind(this)
+
+    const token = localStorage.getItem('token')
+    const path = localStorage.getItem('nodes')
+    let user = {}
+    let nodes = []
+
+    if (token) {
+      const decoded = jwtDecode(token)
+      user = {
+        isAuthenticated: true,
+        token: token,
+        ...decoded
+      }
+    }
+
+    if (path) {
+      nodes = JSON.parse(path)
+    }
+
     this.state = {
       loading: false,
       context: {
-        user: {},
-        selectedNodes: [],
+        user: user,
+        selectedNodes: nodes,
         selectNode: this.selectNode,
         showMessage: this.showMessage,
         showLoading: this.showLoading
@@ -31,24 +50,8 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() {
-    const token = localStorage.getItem('token')
-    if (token) {
-      const decoded = jwtDecode(token)
-      this.setState(prevState => ({
-        context: {
-          ...prevState.context,
-          user: {
-            isAuthenticated: true,
-            token: token,
-            ...decoded
-          }
-        }
-      }))
-    }
-  }
-
   selectNode(nodes) {
+    localStorage.setItem('nodes', JSON.stringify(nodes))
     this.setState(prevState => ({
       context: {
         ...prevState.context,
@@ -72,12 +75,16 @@ class App extends React.Component {
       prevState => ({
         context: {
           ...prevState.context,
+          selectedNodes: [],
           user: {
             isAuthenticated: false
           }
         }
       }),
-      () => localStorage.removeItem('token')
+      () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('nodes')
+      }
     )
   }
 
@@ -97,7 +104,12 @@ class App extends React.Component {
           <Content style={{ padding: '0 50px' }}>
             <MyBreadcrumb context={this.state.context} />
             <Spin spinning={this.state.loading} size="large">
-              <div style={{ background: '#fff', padding: 24, minHeight: 480 }}>
+              <div
+                style={{
+                  background: '#fff',
+                  padding: 24,
+                  minHeight: window.innerHeight - 149
+                }}>
                 <Switch>
                   <PrivateRoute
                     path="/tree"

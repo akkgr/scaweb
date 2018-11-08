@@ -33,11 +33,7 @@ function MyMenu(props) {
   }
 
   return (
-    <Menu
-      theme="dark"
-      mode="horizontal"
-      defaultSelectedKeys={['1']}
-      style={{ lineHeight: '64px' }}>
+    <Menu theme="dark" mode="horizontal" style={{ lineHeight: '64px' }}>
       <Menu.Item key="1">
         <Link to="/" className="nav-text">
           <Icon type="home" />
