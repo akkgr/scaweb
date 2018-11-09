@@ -46,6 +46,12 @@ function MyMenu(props) {
           Οργανόγραμμα
         </Link>
       </Menu.Item>
+      <Menu.Item key="4">
+        <Link to="/menu" className="nav-text">
+          <Icon type="bars" />
+          Μενού
+        </Link>
+      </Menu.Item>
       {userItem}
     </Menu>
   )

@@ -8,6 +8,7 @@ import PrivateRoute from './Components/PrivateRouter'
 import Login from './Views/Login'
 import MyMenu from './Components/MyMenu'
 import MyBreadcrumb from './Components/MyBreadcrumb'
+import Menu from './Views/Menu'
 
 const jwtDecode = require('jwt-decode')
 const { Header, Content, Footer } = Layout
@@ -108,13 +109,18 @@ class App extends React.Component {
                 style={{
                   background: '#fff',
                   padding: 24,
-                  minHeight: window.innerHeight - 149
+                  minHeight: window.innerHeight - 210
                 }}>
                 <Switch>
                   <PrivateRoute
                     path="/tree"
                     isAuthenticated={this.state.context.user.isAuthenticated}
                     component={OrgTreeNodes}
+                  />
+                  <PrivateRoute
+                    path="/menu"
+                    isAuthenticated={this.state.context.user.isAuthenticated}
+                    component={Menu}
                   />
                   <Route path="/login" component={Login} />
                 </Switch>
