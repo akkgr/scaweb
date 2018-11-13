@@ -9,6 +9,7 @@ import Login from './Views/Login'
 import MyMenu from './Components/MyMenu'
 import MyBreadcrumb from './Components/MyBreadcrumb'
 import Menu from './Views/Menu'
+import Main from './Views/Main'
 
 const jwtDecode = require('jwt-decode')
 const { Header, Content, Footer } = Layout
@@ -123,6 +124,7 @@ class App extends React.Component {
                     component={Menu}
                   />
                   <Route path="/login" component={Login} />
+                  <Route path="/" component={Main} />
                 </Switch>
               </div>
             </Spin>
