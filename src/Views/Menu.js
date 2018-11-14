@@ -39,16 +39,13 @@ class Menu extends React.Component {
   componentDidMount() {
     if (this.context.selectedNodes[0]) {
       this.context.showLoading(true)
-      fetch(
-        'http://localhost:5000/api/orgtreenodes/menu/' +
-          this.context.selectedNodes[0].id,
-        {
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-            Authorization: 'Bearer ' + this.context.user.token
-          }
+      const url = process.env.REACT_APP_API_URL + '/menu'
+      fetch(url + this.context.selectedNodes[0].id, {
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          Authorization: 'Bearer ' + this.context.user.token
         }
-      )
+      })
         .then(response => Promise.all([response, response.json()]))
         .then(([response, json]) => {
           this.context.showLoading(false)

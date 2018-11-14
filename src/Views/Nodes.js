@@ -38,7 +38,8 @@ class Nodes extends React.Component {
 
   componentDidMount() {
     this.context.showLoading(true)
-    fetch('http://localhost:5000/api/nodes', {
+    const url = process.env.REACT_APP_API_URL + '/nodes'
+    fetch(url, {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         Authorization: 'Bearer ' + this.context.user.token
