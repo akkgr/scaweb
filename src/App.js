@@ -3,7 +3,7 @@ import { Switch, Route, withRouter } from 'react-router-dom'
 import AppContext from './app-context'
 import './app.css'
 import { Layout, Spin, notification } from 'antd'
-import OrgTreeNodes from './Views/OrgTreeNodes'
+import Nodes from './Views/Nodes'
 import PrivateRoute from './Components/PrivateRouter'
 import Login from './Views/Login'
 import MyMenu from './Components/MyMenu'
@@ -116,7 +116,7 @@ class App extends React.Component {
                   <PrivateRoute
                     path="/tree"
                     isAuthenticated={this.state.context.user.isAuthenticated}
-                    component={OrgTreeNodes}
+                    component={Nodes}
                   />
                   <PrivateRoute
                     path="/menu"

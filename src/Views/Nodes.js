@@ -20,7 +20,7 @@ const stringSimplify = value => {
   return value
 }
 
-class OrgTreeNodes extends React.Component {
+class Nodes extends React.Component {
   static contextType = AppContext
   constructor(props) {
     super(props)
@@ -38,7 +38,7 @@ class OrgTreeNodes extends React.Component {
 
   componentDidMount() {
     this.context.showLoading(true)
-    fetch('http://localhost:5000/api/orgtreenodes/active', {
+    fetch('http://localhost:5000/api/nodes', {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         Authorization: 'Bearer ' + this.context.user.token
@@ -52,7 +52,9 @@ class OrgTreeNodes extends React.Component {
         }
         this.setState({
           data: json,
-          roots: json.filter(n => n.parentId === null)
+          roots: json.filter(
+            n => !n.hasOwnProperty('parentId') || n.parentId === null
+          )
         })
       })
       .catch(exception => {
@@ -111,10 +113,10 @@ class OrgTreeNodes extends React.Component {
     const { searchValue, expandedKeys, autoExpandParent } = this.state
     const loop = data =>
       data.map(item => {
-        const index = stringSimplify(item.node.title).indexOf(searchValue)
-        const beforeStr = item.node.title.substr(0, index)
-        const str = item.node.title.substr(index, searchValue.length)
-        const afterStr = item.node.title.substr(index + searchValue.length)
+        const index = stringSimplify(item.title).indexOf(searchValue)
+        const beforeStr = item.title.substr(0, index)
+        const str = item.title.substr(index, searchValue.length)
+        const afterStr = item.title.substr(index + searchValue.length)
         const title =
           index > -1 ? (
             <span>
@@ -123,7 +125,7 @@ class OrgTreeNodes extends React.Component {
               {afterStr}
             </span>
           ) : (
-            <span>{item.node.title}</span>
+            <span>{item.title}</span>
           )
         const nodes = this.state.data.filter(n => n.parentId === item.id)
         if (nodes && nodes.length) {
@@ -155,4 +157,4 @@ class OrgTreeNodes extends React.Component {
   }
 }
 
-export default OrgTreeNodes
+export default Nodes

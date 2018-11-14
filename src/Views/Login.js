@@ -4,7 +4,7 @@ import AppContext from './../app-context'
 
 const jwtDecode = require('jwt-decode')
 const FormItem = Form.Item
-const url = 'http://localhost:5000/api/token'
+const url = process.env.REACT_APP_API_URL + '/token'
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field])

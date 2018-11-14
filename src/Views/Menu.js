@@ -37,34 +37,36 @@ class Menu extends React.Component {
   }
 
   componentDidMount() {
-    this.context.showLoading(true)
-    fetch(
-      'http://localhost:5000/api/orgtreenodes/menu/' +
-        this.context.selectedNodes[0].id,
-      {
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-          Authorization: 'Bearer ' + this.context.user.token
+    if (this.context.selectedNodes[0]) {
+      this.context.showLoading(true)
+      fetch(
+        'http://localhost:5000/api/orgtreenodes/menu/' +
+          this.context.selectedNodes[0].id,
+        {
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            Authorization: 'Bearer ' + this.context.user.token
+          }
         }
-      }
-    )
-      .then(response => Promise.all([response, response.json()]))
-      .then(([response, json]) => {
-        this.context.showLoading(false)
-        if (!response.ok) {
-          throw new Error(json.message)
-        }
-        this.setState({
-          data: json,
-          roots: json.filter(
-            n => n.parentId === this.context.selectedNodes[0].id
-          )
+      )
+        .then(response => Promise.all([response, response.json()]))
+        .then(([response, json]) => {
+          this.context.showLoading(false)
+          if (!response.ok) {
+            throw new Error(json.message)
+          }
+          this.setState({
+            data: json,
+            roots: json.filter(
+              n => n.parentId === this.context.selectedNodes[0].id
+            )
+          })
         })
-      })
-      .catch(exception => {
-        this.context.showLoading(false)
-        this.context.showMessage('error', 'sca', exception.message)
-      })
+        .catch(exception => {
+          this.context.showLoading(false)
+          this.context.showMessage('error', 'sca', exception.message)
+        })
+    }
   }
 
   nodeSelected(selectedKeys, { selected, node }) {
