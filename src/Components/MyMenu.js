@@ -8,6 +8,7 @@ function MyMenu(props) {
   let userItem
   let menu1
   let menu2
+  let menu3
   if (user.isAuthenticated) {
     userItem = (
       <SubMenu
@@ -39,6 +40,22 @@ function MyMenu(props) {
         </Link>
       </Menu.Item>
     )
+    menu3 = (
+      <SubMenu
+        title={
+          <span className="submenu-title-wrapper">
+            <Icon type="setting" />
+            Διαχείρηση
+          </span>
+        }>
+        <Menu.Item key="5">
+          <Link to="/users" className="nav-text">
+            <Icon type="team" />
+            Χρήστες
+          </Link>
+        </Menu.Item>
+      </SubMenu>
+    )
   } else {
     userItem = (
       <Menu.Item key="3" style={{ float: 'right' }}>
@@ -50,6 +67,7 @@ function MyMenu(props) {
     )
     menu1 = ''
     menu2 = ''
+    menu3 = ''
   }
 
   return (
@@ -62,6 +80,7 @@ function MyMenu(props) {
       </Menu.Item>
       {menu1}
       {menu2}
+      {menu3}
       {userItem}
     </Menu>
   )

@@ -10,6 +10,8 @@ import MyMenu from './Components/MyMenu'
 import MyBreadcrumb from './Components/MyBreadcrumb'
 import Menu from './Views/Menu'
 import Main from './Views/Main'
+import MyList from './Views/MyList'
+import MyForm from './Views/MyForm'
 
 const jwtDecode = require('jwt-decode')
 const { Header, Content, Footer } = Layout
@@ -29,10 +31,14 @@ class App extends React.Component {
 
     if (token) {
       const decoded = jwtDecode(token)
-      user = {
-        isAuthenticated: true,
-        token: token,
-        ...decoded
+      if (decoded.exp < new Date().valueOf() / 1000) {
+        localStorage.removeItem('token')
+      } else {
+        user = {
+          isAuthenticated: true,
+          token: token,
+          ...decoded
+        }
       }
     }
 
@@ -113,6 +119,7 @@ class App extends React.Component {
                   minHeight: window.innerHeight - 210
                 }}>
                 <Switch>
+                  <Route path="/login" component={Login} />
                   <PrivateRoute
                     path="/tree"
                     isAuthenticated={this.state.context.user.isAuthenticated}
@@ -123,7 +130,16 @@ class App extends React.Component {
                     isAuthenticated={this.state.context.user.isAuthenticated}
                     component={Menu}
                   />
-                  <Route path="/login" component={Login} />
+                  <PrivateRoute
+                    path="/:obj"
+                    isAuthenticated={this.state.context.user.isAuthenticated}
+                    component={MyList}
+                  />
+                  <PrivateRoute
+                    path="/:obj/:id"
+                    isAuthenticated={this.state.context.user.isAuthenticated}
+                    component={MyForm}
+                  />
                   <Route path="/" component={Main} />
                 </Switch>
               </div>
