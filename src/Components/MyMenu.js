@@ -2,8 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Menu, Icon } from 'antd'
 
-function MyMenu(props) {
-  const { user, logout } = props
+function MyMenu({ user, logout }) {
   const SubMenu = Menu.SubMenu
   let userItem
   let menu1
