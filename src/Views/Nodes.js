@@ -88,7 +88,7 @@ class Nodes extends React.Component {
     value = stringSimplify(value)
     const expandedKeys = this.state.data
       .map(item => {
-        const title = stringSimplify(item.node.title)
+        const title = stringSimplify(item.title)
         if (title.indexOf(value) > -1) {
           return item.id.toString()
         }

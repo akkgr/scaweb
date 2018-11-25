@@ -4,7 +4,7 @@ import { Tag } from 'antd'
 function MyBreadcrumb(props) {
   const { context } = props
   return (
-    <div style={{ margin: '16px 0', minHeight: '45.2px' }}>
+    <div style={{ minHeight: '66px', padding: '0px 20px 20px 20px' }}>
       {context.selectedNodes
         .slice(0)
         .reverse()

@@ -14,7 +14,7 @@ import MyList from './Views/MyList'
 import MyForm from './Views/MyForm'
 
 const jwtDecode = require('jwt-decode')
-const { Header, Content, Footer } = Layout
+const { Header, Content } = Layout
 
 class App extends React.Component {
   constructor(props) {
@@ -33,6 +33,7 @@ class App extends React.Component {
       const decoded = jwtDecode(token)
       if (decoded.exp < new Date().valueOf() / 1000) {
         localStorage.removeItem('token')
+        localStorage.removeItem('nodes')
       } else {
         user = {
           isAuthenticated: true,
@@ -109,14 +110,14 @@ class App extends React.Component {
           <Header>
             <MyMenu user={this.state.context.user} logout={this.logout} />
           </Header>
-          <Content style={{ padding: '0 50px' }}>
-            <MyBreadcrumb context={this.state.context} />
+          <Content style={{ padding: '20px 20px' }}>
             <Spin spinning={this.state.loading} size="large">
               <div
                 style={{
                   background: '#fff',
-                  padding: 24,
-                  minHeight: window.innerHeight - 210
+                  padding: 14,
+                  height: window.innerHeight - 170,
+                  overflowY: 'scroll'
                 }}>
                 <Switch>
                   <Route path="/login" component={Login} />
@@ -145,9 +146,7 @@ class App extends React.Component {
               </div>
             </Spin>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>
-            Social Care Actions ©2018 Created by Cinnamon
-          </Footer>
+          <MyBreadcrumb context={this.state.context} />
         </Layout>
       </AppContext.Provider>
     )

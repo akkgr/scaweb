@@ -110,6 +110,6 @@ class LoginForm extends React.Component {
   }
 }
 
+LoginForm.contextType = AppContext
 const Login = Form.create()(LoginForm)
-Login.contextType = AppContext
 export default Login

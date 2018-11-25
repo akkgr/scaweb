@@ -1,6 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
-import { Table, Menu, Button } from 'antd'
+import { Table, Button, Input } from 'antd'
 import AppContext from './../app-context'
 import './MyList.css'
 
@@ -47,6 +47,7 @@ class MyList extends React.Component {
       return {
         title: item.title,
         dataIndex: item.key,
+        filters: [],
         onFilter: (value, record) => record[item.key].indexOf(value) === 0,
         sorter: (a, b) => a[item.key] > b[item.key]
       }
@@ -55,6 +56,7 @@ class MyList extends React.Component {
     return (
       <>
         <div className="toolBar">
+          <Input.Search />
           <Button
             shape="circle"
             icon="plus"
@@ -75,6 +77,7 @@ class MyList extends React.Component {
           />
         </div>
         <Table
+          size="small"
           rowKey="_id"
           columns={columns}
           dataSource={this.state.data}
