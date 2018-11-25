@@ -39,7 +39,7 @@ class Menu extends React.Component {
     if (this.context.selectedNodes[0]) {
       this.context.showLoading(true)
       const url = process.env.REACT_APP_API_URL + '/menu'
-      fetch(url + this.context.selectedNodes[0].id, {
+      fetch(url, {
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
           Authorization: 'Bearer ' + this.context.user.token

@@ -1,0 +1,12 @@
+.selected {
+  background-color: #e1e1e1;
+}
+
+.toolBar {
+  margin-bottom: 5px;
+  text-align: right;
+}
+
+.toolBar button {
+  margin-right: 5px;
+}

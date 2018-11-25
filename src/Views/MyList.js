@@ -1,14 +1,17 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
-import { Table } from 'antd'
+import { Table, Menu, Button } from 'antd'
 import AppContext from './../app-context'
+import './MyList.css'
 
 class MyList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       columns: [],
-      data: []
+      data: [],
+      selectedRow: {},
+      selectedIndex: ''
     }
   }
 
@@ -49,7 +52,45 @@ class MyList extends React.Component {
       }
     })
 
-    return <Table columns={columns} dataSource={this.state.data} />
+    return (
+      <>
+        <div className="toolBar">
+          <Button
+            shape="circle"
+            icon="plus"
+            style={{ color: 'green' }}
+            disabled={this.state.selectedIndex.length === 0}
+          />
+          <Button
+            shape="circle"
+            icon="edit"
+            style={{ color: 'blue' }}
+            disabled={this.state.selectedIndex.length === 0}
+          />
+          <Button
+            shape="circle"
+            icon="minus"
+            style={{ color: 'red' }}
+            disabled={this.state.selectedIndex.length === 0}
+          />
+        </div>
+        <Table
+          rowKey="_id"
+          columns={columns}
+          dataSource={this.state.data}
+          rowClassName={(record, index) =>
+            index === this.state.selectedIndex ? 'selected' : ''
+          }
+          onRow={(selectedRow, selectedIndex) => {
+            return {
+              onClick: () => {
+                this.setState({ selectedRow, selectedIndex })
+              }
+            }
+          }}
+        />
+      </>
+    )
   }
 }
 
