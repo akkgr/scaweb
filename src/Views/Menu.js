@@ -21,7 +21,6 @@ const stringSimplify = value => {
 }
 
 class Menu extends React.Component {
-  static contextType = AppContext
   constructor(props) {
     super(props)
     this.nodeSelected = this.nodeSelected.bind(this)
@@ -160,4 +159,5 @@ class Menu extends React.Component {
   }
 }
 
+Menu.contextType = AppContext
 export default Menu

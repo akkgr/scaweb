@@ -11,8 +11,6 @@ function hasErrors(fieldsError) {
 }
 
 class LoginForm extends React.Component {
-  static contextType = AppContext
-
   componentDidMount() {
     // To disabled submit button at the beginning.
     this.props.form.validateFields()
@@ -113,4 +111,5 @@ class LoginForm extends React.Component {
 }
 
 const Login = Form.create()(LoginForm)
+Login.contextType = AppContext
 export default Login

@@ -11,7 +11,7 @@ function MyBreadcrumb(props) {
         .map(item => {
           return (
             <Tag color="blue" key={item.id}>
-              {item.node.title}
+              {item.title}
             </Tag>
           )
         })}

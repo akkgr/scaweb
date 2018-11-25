@@ -21,7 +21,6 @@ const stringSimplify = value => {
 }
 
 class Nodes extends React.Component {
-  static contextType = AppContext
   constructor(props) {
     super(props)
     this.nodeSelected = this.nodeSelected.bind(this)
@@ -157,5 +156,5 @@ class Nodes extends React.Component {
     )
   }
 }
-
+Nodes.contextType = AppContext
 export default Nodes
