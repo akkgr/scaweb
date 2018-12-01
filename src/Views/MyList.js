@@ -1,12 +1,13 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
-import { Table, Button, Input } from 'antd'
+import { Table, Button, Input, Form } from 'antd'
 import AppContext from './../app-context'
 import './MyList.css'
 
 class MyList extends React.Component {
   constructor(props) {
     super(props)
+    this.handleEdit = this.handleEdit.bind(this)
     this.state = {
       columns: [],
       data: [],
@@ -42,6 +43,8 @@ class MyList extends React.Component {
       })
   }
 
+  handleEdit() {}
+
   render() {
     const columns = this.state.columns.map(item => {
       return {
@@ -55,27 +58,36 @@ class MyList extends React.Component {
 
     return (
       <>
-        <div className="toolBar">
-          <Input.Search />
-          <Button
-            shape="circle"
-            icon="plus"
-            style={{ color: 'green' }}
-            disabled={this.state.selectedIndex.length === 0}
-          />
-          <Button
-            shape="circle"
-            icon="edit"
-            style={{ color: 'blue' }}
-            disabled={this.state.selectedIndex.length === 0}
-          />
-          <Button
-            shape="circle"
-            icon="minus"
-            style={{ color: 'red' }}
-            disabled={this.state.selectedIndex.length === 0}
-          />
-        </div>
+        <Form layout="inline">
+          <Form.Item>
+            <Input.Search style={{ width: window.innerWidth - 230 }} />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              shape="circle"
+              icon="plus"
+              style={{ color: 'green' }}
+              disabled={this.state.selectedIndex.length === 0}
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              shape="circle"
+              icon="edit"
+              style={{ color: 'blue' }}
+              disabled={this.state.selectedIndex.length === 0}
+              onClick={this.handleEdit}
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              shape="circle"
+              icon="minus"
+              style={{ color: 'red' }}
+              disabled={this.state.selectedIndex.length === 0}
+            />
+          </Form.Item>
+        </Form>
         <Table
           size="small"
           rowKey="_id"
