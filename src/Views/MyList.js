@@ -11,8 +11,7 @@ class MyList extends React.Component {
     this.state = {
       columns: [],
       data: [],
-      selectedRow: {},
-      selectedIndex: ''
+      selectedId: ''
     }
   }
 
@@ -43,7 +42,10 @@ class MyList extends React.Component {
       })
   }
 
-  handleEdit() {}
+  handleEdit() {
+    const url = '/' + this.props.match.params.obj + '/' + this.state.selectedId
+    this.props.history.push(url)
+  }
 
   render() {
     const columns = this.state.columns.map(item => {
@@ -63,19 +65,14 @@ class MyList extends React.Component {
             <Input.Search style={{ width: window.innerWidth - 230 }} />
           </Form.Item>
           <Form.Item>
-            <Button
-              shape="circle"
-              icon="plus"
-              style={{ color: 'green' }}
-              disabled={this.state.selectedIndex.length === 0}
-            />
+            <Button shape="circle" icon="plus" style={{ color: 'green' }} />
           </Form.Item>
           <Form.Item>
             <Button
               shape="circle"
               icon="edit"
               style={{ color: 'blue' }}
-              disabled={this.state.selectedIndex.length === 0}
+              disabled={this.state.selectedId.length === 0}
               onClick={this.handleEdit}
             />
           </Form.Item>
@@ -84,7 +81,7 @@ class MyList extends React.Component {
               shape="circle"
               icon="minus"
               style={{ color: 'red' }}
-              disabled={this.state.selectedIndex.length === 0}
+              disabled={this.state.selectedId.length === 0}
             />
           </Form.Item>
         </Form>
@@ -94,12 +91,12 @@ class MyList extends React.Component {
           columns={columns}
           dataSource={this.state.data}
           rowClassName={(record, index) =>
-            index === this.state.selectedIndex ? 'selected' : ''
+            record._id === this.state.selectedId ? 'selected' : ''
           }
           onRow={(selectedRow, selectedIndex) => {
             return {
               onClick: () => {
-                this.setState({ selectedRow, selectedIndex })
+                this.setState({ selectedId: selectedRow._id })
               }
             }
           }}

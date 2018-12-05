@@ -132,6 +132,7 @@ class App extends React.Component {
                     component={Menu}
                   />
                   <PrivateRoute
+                    exact
                     path="/:obj"
                     isAuthenticated={this.state.context.user.isAuthenticated}
                     component={MyList}
